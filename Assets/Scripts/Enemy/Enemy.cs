@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float idleTime = 1;
     [SerializeField] bool canMove = false;
 
+    public EnemyStatsComponent Stats => stats;
+
     void Start()
     {
         Init();
