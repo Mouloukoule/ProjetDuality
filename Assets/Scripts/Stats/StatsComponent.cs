@@ -18,6 +18,11 @@ public abstract class StatsComponent : MonoBehaviour
     public int Maxhp => maxHp;
     public int CurrentHp => currentHp;
 
+    private void Start()
+    {
+        OnDeath += SetIsDead;
+    }
+
     public void SetName(string _name)
     {
         entityname = _name;
@@ -48,5 +53,10 @@ public abstract class StatsComponent : MonoBehaviour
             OnDeath?.Invoke(true);
         }
         OnHpUpdated?.Invoke(currentHp);
+    }
+
+    public void SetIsDead(bool _value)
+    {
+        isDead = _value;
     }
 }

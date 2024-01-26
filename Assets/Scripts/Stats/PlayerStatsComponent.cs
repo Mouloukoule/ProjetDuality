@@ -13,7 +13,7 @@ public class PlayerStatsComponent : StatsComponent
     [SerializeField] float range = 0;
     [SerializeField] float baseMoveSpeed = 5;
     [SerializeField] float moveSpeed = 0;
-    [SerializeField] float attackSpeed = 0;
+    [SerializeField] float attackSpeed = 0.5f;
     [SerializeField] float baseAttackSpeed = .5f;
     [SerializeField] int currentEnergy = 0;
     [SerializeField] int maxEnergy = 0;
