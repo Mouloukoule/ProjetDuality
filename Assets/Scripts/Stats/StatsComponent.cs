@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class StatsComponent : MonoBehaviour
 {
     public event Action<bool> OnDeath = null;
+    public event Action OnIsDeadUpdated = null;
     public event Action<int> OnHpUpdated = null;
 
     [SerializeField] protected string entityName = "";
@@ -17,6 +18,12 @@ public abstract class StatsComponent : MonoBehaviour
     public int Damage => damage;
     public int MaxHp => maxHp;
     public int CurrentHp => currentHp;
+
+    //protected void Start()
+    //{
+    //    Debug.Log("Start");
+    //    OnDeath += SetIsDead;
+    //}
 
     public void SetName(string _name)
     {
@@ -40,13 +47,23 @@ public abstract class StatsComponent : MonoBehaviour
 
     public void AddHp(int _toAdd)
     {
+        //Debug.Log("HP updated");
         if (isDead) return;
         currentHp += _toAdd;
         if(currentHp <= 0)
         {
+            //Debug.Log("HP<=0");
             currentHp = 0;
             OnDeath?.Invoke(true);
         }
         OnHpUpdated?.Invoke(currentHp);
+    }
+
+    public void SetIsDead(bool _value)
+    {
+        //Debug.Log("isDead");
+        isDead = _value;
+        if (!isDead) return;
+        OnIsDeadUpdated?.Invoke();
     }
 }

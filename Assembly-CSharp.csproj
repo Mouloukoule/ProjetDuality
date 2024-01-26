@@ -61,7 +61,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Stats\PlayerStatsComponent.cs" />
+    <Compile Include="Assets\Scripts\Manager\Spawner.cs" />
+    <Compile Include="Assets\Scripts\Enemy\PickupItem.cs" />
+    <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Stats\EnemyStatsComponent.cs" />
+    <Compile Include="Assets\Scripts\Manager\EntityManager.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Manager\Singleton.cs" />
     <Compile Include="Assets\Scripts\Stats\StatsComponent.cs" />
   </ItemGroup>
   <ItemGroup>
