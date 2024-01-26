@@ -6,29 +6,31 @@ using UnityEngine;
 public abstract class StatsComponent : MonoBehaviour
 {
     public event Action<bool> OnDeath = null;
+    public event Action OnIsDeadUpdated = null;
     public event Action<int> OnHpUpdated = null;
 
-    [SerializeField] protected string entityname = "";
+    [SerializeField] protected string entityName = "";
     [SerializeField] protected int damage = 0;
     [SerializeField] protected int maxHp = 5, currentHp = 0;
     [SerializeField] protected bool isDead = false;
 
-    public string EntityName => entityname;
+    public string EntityName => entityName;
     public int Damage => damage;
-    public int Maxhp => maxHp;
+    public int MaxHp => maxHp;
     public int CurrentHp => currentHp;
 
-    private void Start()
-    {
-        OnDeath += SetIsDead;
-    }
+    //protected void Start()
+    //{
+    //    Debug.Log("Start");
+    //    OnDeath += SetIsDead;
+    //}
 
     public void SetName(string _name)
     {
-        entityname = _name;
+        entityName = _name;
     }
 
-    public void SetDamage(int _damage)
+    public void SetDamage(int _damage) 
     {
         damage = _damage;
     }
@@ -38,17 +40,19 @@ public abstract class StatsComponent : MonoBehaviour
         maxHp = _maxHp;
     }
 
-    public void SetCurrent(int _currentHp) 
+    public void SetCurrentHp(int _currentHp)
     {
         currentHp = _currentHp;
     }
 
     public void AddHp(int _toAdd)
     {
-        if(isDead) return;
+        //Debug.Log("HP updated");
+        if (isDead) return;
         currentHp += _toAdd;
         if(currentHp <= 0)
         {
+            //Debug.Log("HP<=0");
             currentHp = 0;
             OnDeath?.Invoke(true);
         }
@@ -57,6 +61,9 @@ public abstract class StatsComponent : MonoBehaviour
 
     public void SetIsDead(bool _value)
     {
+        //Debug.Log("isDead");
         isDead = _value;
+        if (!isDead) return;
+        OnIsDeadUpdated?.Invoke();
     }
 }

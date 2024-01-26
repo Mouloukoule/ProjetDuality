@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class EnemyStatsComponent : StatsComponent
 {
-
     // Start is called before the first frame update
     void Start()
     {
