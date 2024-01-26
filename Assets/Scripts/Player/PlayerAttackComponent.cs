@@ -32,8 +32,8 @@ public class PlayerAttackComponent : MonoBehaviour
         Debug.Log("Hit");
         Enemy _enemy = _result.transform.GetComponent<Enemy>();
         if(!_enemy) return;
-        _enemy.EnemyStats.AddHp(-playerStats.Damage);
-        Debug.Log(_enemy.EnemyStats.CurrentHp);
+        _enemy.Stats.AddHp(-playerStats.Damage);
+        Debug.Log(_enemy.Stats.CurrentHp);
     }
 
     void Init()
