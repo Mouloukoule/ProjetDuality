@@ -18,7 +18,7 @@ public abstract class StatsComponent : MonoBehaviour
     public int Damage => damage;
     public int MaxHp => maxHp;
     public int CurrentHp => currentHp;
-
+    public bool IsDead => isDead;
     //protected void Start()
     //{
     //    Debug.Log("Start");

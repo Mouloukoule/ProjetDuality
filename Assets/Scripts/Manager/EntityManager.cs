@@ -1,11 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityManager : Singleton<EntityManager>
 {
+    public event Action OnLastEnemyKilled = null;
+
     [SerializeField] List<Enemy> allEnemies = new List<Enemy>();
+    [SerializeField] bool noEnemies = false;
     public List<Enemy> AllEnemies => allEnemies;
+
+    private void Update()
+    {
+        noEnemies = CheckIfEmpty();
+        if(noEnemies)
+            OnLastEnemyKilled?.Invoke();
+    }
+
+    public bool CheckIfEmpty()
+    {
+        return allEnemies.Count == 0;
+    }
 
     public void AddEnemy(Enemy _toAdd)
     {
