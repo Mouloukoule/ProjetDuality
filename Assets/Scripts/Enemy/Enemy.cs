@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] bool canMove = false;
 
     public EnemyStatsComponent Stats => stats;
+    public Player PlayerRef { get { return playerRef; } set { playerRef = value; } }
 
     void Start()
     {
@@ -31,14 +32,14 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         if (!agent || !agent.enabled || !canMove || !playerRef) return;
-        agent.SetDestination(playerRef.transform.position);
+        agent.SetDestination(playerRef.transform.position); //use navmesh to go towards player
     }
 
     public void Init()
     {
         stats = GetComponent<EnemyStatsComponent>();
         agent = GetComponent<NavMeshAgent>();
-        Invoke(nameof(AllowMovement), idleTime);
+        Invoke(nameof(AllowMovement), idleTime); //moves only after a certain time
         stats.OnDeath += stats.SetIsDead;
         stats.OnIsDeadUpdated += Death;
     }
@@ -48,14 +49,14 @@ public class Enemy : MonoBehaviour
         canMove = true;
     }
 
-    private void Death()
+    private void Death() 
     {
         EntityManager.Instance.RemoveEnemy(this);
         Instantiate(itemToDrop, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) //hurts the player on collision
     {
         Player _player = collision.transform.GetComponent<Player>();
         if (!_player) return;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStatsComponent : StatsComponent
@@ -10,13 +11,17 @@ public class PlayerStatsComponent : StatsComponent
     public event Action<float> OnAttackSpeedUpdated = null;
     public event Action<int> OnEnergyUpdated = null;
 
-    [SerializeField] float range = 0;
-    [SerializeField] float baseMoveSpeed = 5;
-    [SerializeField] float moveSpeed = 0;
-    [SerializeField] float attackSpeed = 0.5f;
+    [SerializeField] float range = 50;
+    [SerializeField] float baseMoveSpeed = 10;
+    [SerializeField] float moveSpeed = 10;
+    [SerializeField] float attackSpeed = .5f;
     [SerializeField] float baseAttackSpeed = .5f;
-    [SerializeField] int currentEnergy = 0;
-    [SerializeField] int maxEnergy = 0;
+    [SerializeField] int currentEnergy = 50;
+    [SerializeField] int maxEnergy = 100;
+    [SerializeField] float currentTime = 0, depletionTimer = 3;
+
+    [SerializeField] int energyToDeplete = 5, hpToDeplete = 1;
+    [SerializeField] bool canLoseHp = false;
 
     public float Range => range;
     public float MoveSpeed => moveSpeed;
@@ -29,12 +34,14 @@ public class PlayerStatsComponent : StatsComponent
     // Start is called before the first frame update
     void Start()
     {
-        
+        OnEnergyUpdated += UpdateStatsBasedOnEnergy;
     }
 
     void Update()
     {
-        
+        DepleteEnergyTimer(ref currentTime, depletionTimer);
+        if(canLoseHp)
+            DepleteHpTimer(ref currentTime, depletionTimer);
     }
 
     public void SetRange(float _range)
@@ -70,5 +77,57 @@ public class PlayerStatsComponent : StatsComponent
             currentEnergy = 0;
         }
         OnEnergyUpdated?.Invoke(currentEnergy);
+    }
+
+    void DepleteEnergyTimer(ref float _current, float _max)
+    {
+        _current += Time.deltaTime;
+        if(_current >= _max)
+        {
+            _current = 0;
+            AddEnergy(-energyToDeplete);
+        }
+    }
+
+    void DepleteHpTimer(ref float _current, float _max)
+    {
+        _current += Time.deltaTime;
+        if (_current >= _max)
+        {
+            _current = 0;
+            AddHp(-hpToDeplete);
+        }
+    }
+
+    void UpdateStatsBasedOnEnergy(int _energy)
+    {
+        switch (_energy)
+        {
+            default:
+                {
+                    canLoseHp = false;
+                    moveSpeed = baseMoveSpeed;
+                    attackSpeed = baseAttackSpeed;
+                    break;
+                }
+            case 0: 
+                {
+                    canLoseHp = true;
+                    break;
+                }
+            case >= 100:
+                {
+                    canLoseHp = true;
+                    break;
+                }
+            case >= 80: 
+                {
+                    canLoseHp = false;
+                    moveSpeed = baseMoveSpeed / 2;
+                    attackSpeed = baseAttackSpeed * 1.5f;
+                    break;
+                }
+
+        }
     }
 }

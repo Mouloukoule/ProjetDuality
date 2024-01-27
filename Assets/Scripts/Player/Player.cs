@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -39,6 +40,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1;
         controls = new Controls();
         Init();
     }
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         //Init();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -71,10 +74,22 @@ public class Player : MonoBehaviour
         playerStats = GetComponent<PlayerStatsComponent>();
         movement = GetComponent<PlayerMovementComponent>();
         attack = GetComponent<PlayerAttackComponent>();
+
+        playerStats.OnDeath += playerStats.SetIsDead;
+        playerStats.OnIsDeadUpdated += Death;
+
         //test = GetComponent<GameObject>();
         //InvokeRepeating(nameof(Detect), 0, customTickRate);
         //OnHitGround += SetWorldPosition;
 
+    }
+
+    void Death()
+    {
+        Time.timeScale = 0;
+        Destroy(this.gameObject);
+        EntityManager.Instance.RemoveAll();
+        Debug.Log(Spawner.Instance.TotalTimer);
     }
 
     //void Detect()

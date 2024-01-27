@@ -118,4 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c343637adfb931742b67355633ecbe43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyToGive: 5
+  energyToGive: 10
