@@ -10,7 +10,9 @@ public class PlayerAttackComponent : MonoBehaviour
     [SerializeField] Player player = null;
     [SerializeField] LayerMask enemyLayer = 0;
     [SerializeField] float currentTime = 0;
-    [SerializeField] bool canAttack = true;
+    [SerializeField] float skill1Cooldown = 5, skill1CurrentTime = 0;
+    [SerializeField] bool canAttack = true, skill1Ready = true;
+    [SerializeField] int energyCost = 15, hpToRestore = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +24,9 @@ public class PlayerAttackComponent : MonoBehaviour
     void Update()
     {
         if (!canAttack)
-            IncreaseTime(ref currentTime, playerStats.AttackSpeed);
+            IncreaseTime(ref currentTime, playerStats.AttackSpeed, ref canAttack);
+        if (!skill1Ready)
+            IncreaseTime(ref skill1CurrentTime, skill1Cooldown, ref skill1Ready);
     }
 
     public void Attack(InputAction.CallbackContext _context)
@@ -49,13 +53,22 @@ public class PlayerAttackComponent : MonoBehaviour
 
     }
 
-    void IncreaseTime(ref float _current, float _max)
+    void IncreaseTime(ref float _current, float _max, ref bool _toSwitch)
     {
         _current += Time.deltaTime;
         if(_current >= _max)
         {
             _current = 0;
-            canAttack = true;
+            _toSwitch = true;
         }
+    }
+
+    public void Heal(InputAction.CallbackContext _context)
+    {
+        if (!playerStats || playerStats.CurrentEnergy <= energyCost) return;
+        
+        playerStats.AddEnergy(-energyCost);
+        playerStats.AddHp(hpToRestore);
+        skill1Ready = false;
     }
 }

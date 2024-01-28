@@ -21,7 +21,7 @@ public class PlayerStatsComponent : StatsComponent
     [SerializeField] float currentTime = 0, depletionTimer = 3;
 
     [SerializeField] int energyToDeplete = 5, hpToDeplete = 1;
-    [SerializeField] bool canLoseHp = false;
+    [SerializeField] bool canLoseHp = false, canLoseEnergy = true;
 
     public float Range => range;
     public float MoveSpeed => moveSpeed;
@@ -39,7 +39,8 @@ public class PlayerStatsComponent : StatsComponent
 
     void Update()
     {
-        DepleteEnergyTimer(ref currentTime, depletionTimer);
+        if(canLoseEnergy)
+            DepleteEnergyTimer(ref currentTime, depletionTimer);
         if(canLoseHp)
             DepleteHpTimer(ref currentTime, depletionTimer);
     }
@@ -118,13 +119,13 @@ public class PlayerStatsComponent : StatsComponent
             case >= 100:
                 {
                     canLoseHp = true;
+                    attackSpeed = baseAttackSpeed * 1.5f;
                     break;
                 }
             case >= 80: 
                 {
                     canLoseHp = false;
                     moveSpeed = baseMoveSpeed / 2;
-                    attackSpeed = baseAttackSpeed * 1.5f;
                     break;
                 }
 
