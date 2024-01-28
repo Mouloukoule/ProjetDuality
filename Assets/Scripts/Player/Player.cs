@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     //[SerializeField] LayerMask maskGround = 0;
     //[SerializeField] float customTickRate = .2f;
     //[SerializeField] float detectionRange = 50;
+    double score = 0;
+    public double Score => score;
 
     [SerializeField] Controls controls = null;
     [SerializeField] InputAction move = null;
@@ -94,7 +96,9 @@ public class Player : MonoBehaviour
         Destroy(this.gameObject);
         EntityManager.Instance.RemoveAll();
         double _score = Math.Round(Spawner.Instance.TotalTimer, 2);
-        Debug.Log(_score);
+        score = _score;
+        Cursor.lockState = CursorLockMode.None;
+        //Debug.Log(_score);
     }
 
     //void Detect()

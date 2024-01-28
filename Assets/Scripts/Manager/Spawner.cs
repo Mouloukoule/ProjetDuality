@@ -16,6 +16,11 @@ public class Spawner : Singleton<Spawner>
     [SerializeField] bool waveCanSpawn = true;
 
     public float TotalTimer => totalTimer;
+    public int WaveNumber => waveNumber;
+    public float CurrentTime => currentTime;
+    public float WaveDelay => waveDelay;
+    public int EnemyNumberToSpawn => enemyNumberToSpawn;
+
     // Start is called before the first frame update
     void Start()
     {

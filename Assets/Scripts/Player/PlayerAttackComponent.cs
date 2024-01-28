@@ -14,6 +14,9 @@ public class PlayerAttackComponent : MonoBehaviour
     [SerializeField] bool canAttack = true, skill1Ready = true;
     [SerializeField] int energyCost = 15, hpToRestore = 2;
 
+    public float Skill1Cooldown => skill1Cooldown;
+    public float Skill1CurrentTime => skill1CurrentTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -65,7 +68,7 @@ public class PlayerAttackComponent : MonoBehaviour
 
     public void Heal(InputAction.CallbackContext _context)
     {
-        if (!playerStats || playerStats.CurrentEnergy <= energyCost) return;
+        if (!playerStats || playerStats.CurrentEnergy <= energyCost || playerStats.CurrentHp >= 10 || !skill1Ready) return;
         
         playerStats.AddEnergy(-energyCost);
         playerStats.AddHp(hpToRestore);
