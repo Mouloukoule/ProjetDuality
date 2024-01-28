@@ -49,8 +49,8 @@ public abstract class StatsComponent : MonoBehaviour
     {
         //Debug.Log("HP updated");
         if (isDead) return;
-        currentHp += _toAdd;
-        if(currentHp <= 0)
+        currentHp = currentHp + _toAdd <= 0 ? 0 : currentHp + _toAdd >= maxHp ? maxHp : currentHp + _toAdd;
+        if (currentHp <= 0)
         {
             //Debug.Log("HP<=0");
             currentHp = 0;
