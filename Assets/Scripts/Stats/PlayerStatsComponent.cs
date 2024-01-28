@@ -34,15 +34,22 @@ public class PlayerStatsComponent : StatsComponent
     // Start is called before the first frame update
     void Start()
     {
-        OnEnergyUpdated += UpdateStatsBasedOnEnergy;
+        Init();
     }
 
     void Update()
     {
+        SetMoveSpeed(moveSpeed);
+        SetAttackSpeed(attackSpeed);
         if(canLoseEnergy)
             DepleteEnergyTimer(ref currentTime, depletionTimer);
         if(canLoseHp)
             DepleteHpTimer(ref currentTime, depletionTimer);
+    }
+
+    void Init()
+    {
+        OnEnergyUpdated += UpdateStatsBasedOnEnergy;
     }
 
     public void SetRange(float _range)
@@ -77,6 +84,8 @@ public class PlayerStatsComponent : StatsComponent
         {
             currentEnergy = 0;
         }
+        if(currentEnergy >= maxEnergy)
+            currentEnergy = maxEnergy;
         OnEnergyUpdated?.Invoke(currentEnergy);
     }
 
@@ -120,12 +129,14 @@ public class PlayerStatsComponent : StatsComponent
                 {
                     canLoseHp = true;
                     attackSpeed = baseAttackSpeed * 1.5f;
+                    OnAttackSpeedUpdated?.Invoke(attackSpeed);
                     break;
                 }
             case >= 80: 
                 {
                     canLoseHp = false;
                     moveSpeed = baseMoveSpeed / 2;
+                    OnMoveSpeedUpdated?.Invoke(moveSpeed);
                     break;
                 }
 
