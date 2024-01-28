@@ -8,6 +8,7 @@ public class PlayerMovementComponent : MonoBehaviour
 
     [SerializeField] Player player = null;
     [SerializeField] PlayerStatsComponent playerStats = null;
+    [SerializeField] float maxCoordinate = 125;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,10 @@ public class PlayerMovementComponent : MonoBehaviour
             transform.position += transform.forward * _movementDirection.z * playerStats.MoveSpeed * Time.deltaTime;
             transform.position += transform.right * _movementDirection.x * playerStats.MoveSpeed * Time.deltaTime;
         }
+        if (transform.position.x >= maxCoordinate) transform.position = new Vector3(maxCoordinate, transform.position.y, transform.position.z);
+        if (transform.position.x <= -maxCoordinate) transform.position = new Vector3(-maxCoordinate, transform.position.y, transform.position.z);
+        if (transform.position.z >= maxCoordinate) transform.position = new Vector3(transform.position.x, transform.position.y, maxCoordinate);
+        if (transform.position.z <= -maxCoordinate) transform.position = new Vector3(transform.position.x, transform.position.y, -maxCoordinate);
     }
 
     public void Rotate()

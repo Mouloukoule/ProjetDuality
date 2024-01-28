@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] InputAction move = null;
     [SerializeField] InputAction rotate = null;
     [SerializeField] InputAction leftClick = null;
+    [SerializeField] InputAction skill = null;
 
     [SerializeField] PlayerStatsComponent playerStats = null;
     [SerializeField] PlayerMovementComponent movement = null;
@@ -67,6 +68,9 @@ public class Player : MonoBehaviour
         leftClick = controls.Player.Attack;
         leftClick.Enable();
         leftClick.performed += attack.Attack;
+        skill = controls.Player.Skill1;
+        skill.Enable();
+        skill.performed += attack.Heal;
     }
 
     void Init()
@@ -89,7 +93,8 @@ public class Player : MonoBehaviour
         Time.timeScale = 0;
         Destroy(this.gameObject);
         EntityManager.Instance.RemoveAll();
-        Debug.Log(Spawner.Instance.TotalTimer);
+        double _score = Math.Round(Spawner.Instance.TotalTimer, 2);
+        Debug.Log(_score);
     }
 
     //void Detect()
