@@ -8,10 +8,14 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    const string IDLE = "Idle";
+    const string WALK = "Walk";
+
     [SerializeField] EnemyStatsComponent stats = null;
     [SerializeField] Player playerRef = null;
     [SerializeField] NavMeshAgent agent = null;
     [SerializeField] PickupItem itemToDrop = null;
+    [SerializeField] Animator enemyAnimator = null;
     [SerializeField] float idleTime = 1;
     [SerializeField] bool canMove = false;
 
@@ -39,6 +43,7 @@ public class Enemy : MonoBehaviour
     {
         stats = GetComponent<EnemyStatsComponent>();
         agent = GetComponent<NavMeshAgent>();
+        enemyAnimator = GetComponent<Animator>();
         Invoke(nameof(AllowMovement), idleTime); //moves only after a certain time
         stats.OnDeath += stats.SetIsDead;
         stats.OnIsDeadUpdated += Death;
@@ -61,5 +66,17 @@ public class Enemy : MonoBehaviour
         Player _player = collision.transform.GetComponent<Player>();
         if (!_player) return;
         _player.PlayerStats.AddHp(-stats.Damage);
+    }
+
+    void SetAnimation()
+    {
+        if(agent.velocity == Vector3.zero)
+        {
+            enemyAnimator.Play(IDLE);
+        }
+        else
+        {
+            enemyAnimator.Play(WALK);
+        }
     }
 }
